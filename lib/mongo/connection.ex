@@ -56,28 +56,28 @@ defmodule Mongo.Connection do
 
   @doc false
   def find(conn, coll, query, select, opts \\ []) do
-    GenServer.call(conn, {:find, coll, query, select, opts})
+    GenServer.call(conn, {:find, coll, query, select, opts}, 60_000)
   end
 
   @doc false
   def get_more(conn, coll, cursor_id, opts \\ []) do
-    GenServer.call(conn, {:get_more, coll, cursor_id, opts})
+    GenServer.call(conn, {:get_more, coll, cursor_id, opts}, 60_000)
   end
 
   @doc false
   def kill_cursors(conn, cursor_ids) do
-    GenServer.call(conn, {:kill_cursors, List.wrap(cursor_ids)})
+    GenServer.call(conn, {:kill_cursors, List.wrap(cursor_ids)}, 60_000)
   end
 
   @doc false
   def find_one(conn, coll, query, select, opts \\ []) do
-    GenServer.call(conn, {:find_one, coll, query, select, opts})
+    GenServer.call(conn, {:find_one, coll, query, select, opts}, 60_000)
   end
 
   @doc false
   def insert(conn, coll, docs, opts \\ []) do
     {ids, docs} = assign_ids(docs)
-    case GenServer.call(conn, {:insert, coll, docs, opts}) do
+    case GenServer.call(conn, {:insert, coll, docs, opts}, 60_000) do
       {:ok, result} -> {:ok, %{result | inserted_ids: ids}}
       other -> other
     end
@@ -85,12 +85,12 @@ defmodule Mongo.Connection do
 
   @doc false
   def update(conn, coll, query, update, opts \\ []) do
-    GenServer.call(conn, {:update, coll, query, update, opts})
+    GenServer.call(conn, {:update, coll, query, update, opts}, 60_000)
   end
 
   @doc false
   def remove(conn, coll, query, opts \\ []) do
-    GenServer.call(conn, {:remove , coll, query, opts})
+    GenServer.call(conn, {:remove , coll, query, opts}, 60_000)
   end
 
   @doc false
